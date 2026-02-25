@@ -1,0 +1,1640 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Skills — Self Assessment</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --xps-blue: #4a9fd9;
+                --xps-blue-light: #6bb3e3;
+                --xps-blue-dark: #3b8ac4;
+                --xps-charcoal: #2d3539;
+                --xps-charcoal-light: #3d474c;
+                --xps-charcoal-dark: #1e2528;
+                --xps-dark-bg: #161b1e;
+                --xps-card-bg: #232a2e;
+                --xps-text: #f0f2f3;
+                --xps-text-muted: #8a9499;
+                --xps-border: rgba(255, 255, 255, 0.1);
+                --xps-success: #4caf50;
+                --xps-warning: #ff9800;
+                --xps-danger: #f44336;
+                --xps-purple: #9c27b0;
+                --xps-accent: #26c6da;
+                --level-1: #5c6bc0;
+                --level-2: #26a69a;
+                --level-3: #ff9800;
+                --level-4: #ef5350;
+            }
+
+            [data-theme="light"] {
+                --xps-charcoal: #e8eaec;
+                --xps-charcoal-light: #f5f6f7;
+                --xps-charcoal-dark: #d0d4d8;
+                --xps-dark-bg: #f0f2f4;
+                --xps-card-bg: #ffffff;
+                --xps-text: #1e2528;
+                --xps-text-muted: #5a6469;
+                --xps-border: rgba(0, 0, 0, 0.1);
+            }
+
+            html {
+                scrollbar-gutter: stable;
+            }
+
+            body {
+                font-family:
+                    "Segoe UI",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    Roboto,
+                    Oxygen,
+                    Ubuntu,
+                    sans-serif;
+                background: var(--xps-dark-bg);
+                min-height: 100vh;
+                color: var(--xps-text);
+                line-height: 1.5;
+                font-size: 17px;
+            }
+
+            /* ─── HEADER ─── */
+            .header-bar {
+                background: var(--xps-charcoal);
+                padding: 14px 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 3px solid var(--xps-blue);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            .logo-container {
+                display: flex;
+                align-items: baseline;
+                gap: 16px;
+            }
+            .logo-container svg {
+                height: 36px;
+                width: auto;
+                align-self: center;
+            }
+            .logo-text {
+                font-size: 1.4rem;
+                font-weight: 400;
+                color: var(--xps-text);
+                letter-spacing: -0.5px;
+            }
+            .logo-text strong {
+                font-weight: 700;
+            }
+            .logo-divider {
+                width: 1px;
+                height: 24px;
+                background: var(--xps-border);
+                align-self: center;
+            }
+            .app-title {
+                font-size: 1.1rem;
+                font-weight: 300;
+                color: var(--xps-text-muted);
+            }
+            .header-actions {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+            .header-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 14px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--xps-border);
+                border-radius: 6px;
+                color: var(--xps-text-muted);
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .header-btn:hover {
+                color: var(--xps-blue);
+                background: rgba(74, 159, 217, 0.15);
+                border-color: var(--xps-blue);
+            }
+            .header-btn.primary {
+                background: var(--xps-blue);
+                border-color: var(--xps-blue);
+                color: #fff;
+                font-weight: 600;
+            }
+            .header-btn.primary:hover {
+                background: var(--xps-blue-dark);
+            }
+            .header-btn.primary:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+            .header-btn.danger:hover {
+                color: var(--xps-danger);
+                background: rgba(244, 67, 54, 0.15);
+                border-color: var(--xps-danger);
+            }
+            .profile-toggle,
+            .theme-toggle {
+                display: flex;
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 6px;
+                padding: 3px;
+                gap: 2px;
+            }
+            .profile-toggle button,
+            .theme-toggle button {
+                padding: 6px 12px;
+                border: none;
+                background: transparent;
+                color: var(--xps-text-muted);
+                font-size: 0.8rem;
+                font-weight: 500;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .profile-toggle button:hover,
+            .theme-toggle button:hover {
+                color: var(--xps-text);
+            }
+            .profile-toggle button.active,
+            .theme-toggle button.active {
+                background: var(--xps-blue);
+                color: #fff;
+            }
+
+            /* ─── LAYOUT ─── */
+            .app-container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 28px 24px;
+            }
+
+            /* ─── NAME ENTRY ─── */
+            .name-section {
+                background: var(--xps-card-bg);
+                border: 1px solid var(--xps-border);
+                border-radius: 10px;
+                padding: 24px;
+                margin-bottom: 24px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            .name-section label {
+                font-weight: 600;
+                font-size: 1rem;
+                white-space: nowrap;
+            }
+            .name-section input {
+                flex: 1;
+                padding: 12px 16px;
+                background: var(--xps-dark-bg);
+                border: 1px solid var(--xps-border);
+                border-radius: 6px;
+                color: var(--xps-text);
+                font-size: 1rem;
+            }
+            .name-section input:focus {
+                outline: none;
+                border-color: var(--xps-blue);
+            }
+
+            /* ─── PROGRESS BAR ─── */
+            .progress-bar {
+                position: sticky;
+                top: 67px;
+                z-index: 99;
+                background: var(--xps-dark-bg);
+                padding: 12px 0 16px;
+                margin: -12px 0 16px;
+            }
+            .progress-track {
+                height: 8px;
+                background: var(--xps-charcoal);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .progress-fill {
+                height: 100%;
+                background: var(--xps-blue);
+                border-radius: 4px;
+                transition: width 0.4s ease, background 0.4s ease;
+            }
+            .progress-fill.complete {
+                background: var(--xps-success);
+            }
+            .progress-label {
+                font-size: 0.85rem;
+                color: var(--xps-text-muted);
+                margin-top: 8px;
+                text-align: right;
+            }
+
+            /* ─── RADAR CHART ─── */
+            .radar-section {
+                background: var(--xps-card-bg);
+                border: 1px solid var(--xps-border);
+                border-radius: 10px;
+                margin-bottom: 24px;
+                overflow: hidden;
+            }
+            .radar-header {
+                padding: 14px 20px;
+                background: var(--xps-charcoal-dark);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                user-select: none;
+                transition: background 0.2s;
+            }
+            .radar-header:hover {
+                background: var(--xps-charcoal);
+            }
+            .radar-header h3 {
+                font-size: 0.85rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                color: var(--xps-blue);
+                margin: 0;
+            }
+            .radar-chevron {
+                font-size: 0.7rem;
+                color: var(--xps-text-muted);
+                transition: transform 0.2s;
+            }
+            .radar-body {
+                padding: 20px;
+                text-align: center;
+            }
+            .radar-body.collapsed {
+                display: none;
+            }
+            .radar-section canvas {
+                display: block;
+                margin: 0 auto;
+            }
+
+            /* ─── CATEGORY CARDS ─── */
+            .category-card {
+                background: var(--xps-card-bg);
+                border: 1px solid var(--xps-border);
+                border-radius: 10px;
+                margin-bottom: 20px;
+                overflow: hidden;
+                transition: border-color 0.3s;
+            }
+            .category-card.complete {
+                border-color: rgba(76, 175, 80, 0.3);
+            }
+            .category-header {
+                background: var(--xps-charcoal-dark);
+                padding: 16px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                user-select: none;
+                transition: background 0.2s;
+            }
+            .category-header:hover {
+                background: var(--xps-charcoal);
+            }
+            .category-title {
+                font-size: 0.95rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                color: var(--xps-blue);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .category-check {
+                display: none;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: var(--xps-success);
+                color: #fff;
+                font-size: 0.7rem;
+                font-weight: 700;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+            .category-card.complete .category-check {
+                display: flex;
+            }
+            .category-card.complete .category-title {
+                color: var(--xps-success);
+            }
+            .category-count {
+                font-size: 0.85rem;
+                color: var(--xps-text-muted);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .category-chevron {
+                transition: transform 0.2s;
+                font-size: 0.7rem;
+            }
+            .category-body.collapsed + .category-header .category-chevron,
+            .collapsed ~ .category-chevron {
+                transform: rotate(-90deg);
+            }
+            .category-body {
+                padding: 0;
+            }
+            .category-body.collapsed {
+                display: none;
+            }
+
+            /* ─── SKILL ROW ─── */
+            .skill-row {
+                padding: 20px 20px 20px 24px;
+                border-bottom: 1px solid var(--xps-border);
+                border-left: 4px solid transparent;
+                transition: border-left-color 0.3s;
+            }
+            .skill-row:last-child {
+                border-bottom: none;
+            }
+            .skill-row.rated {
+                border-left-color: var(--xps-blue);
+            }
+            .skill-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 12px;
+            }
+            .skill-name {
+                font-weight: 600;
+                font-size: 1.05rem;
+            }
+            .skill-info-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: rgba(74, 159, 217, 0.1);
+                border: 1px solid rgba(74, 159, 217, 0.3);
+                color: var(--xps-blue);
+                font-size: 0.8rem;
+                font-weight: 600;
+                cursor: pointer;
+                padding: 5px 12px;
+                border-radius: 5px;
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .skill-info-link:hover {
+                background: rgba(74, 159, 217, 0.2);
+                border-color: var(--xps-blue);
+            }
+            .skill-info-link svg {
+                width: 14px;
+                height: 14px;
+                flex-shrink: 0;
+            }
+
+            /* ─── LEVEL SELECTOR ─── */
+            .level-selector {
+                display: flex;
+                gap: 8px;
+            }
+            .level-option {
+                flex: 1;
+                padding: 12px 8px;
+                border: 2px solid var(--xps-border);
+                border-radius: 8px;
+                background: transparent;
+                color: var(--xps-text-muted);
+                font-size: 0.85rem;
+                font-weight: 600;
+                cursor: pointer;
+                text-align: center;
+                transition: all 0.2s;
+                line-height: 1.3;
+                position: relative;
+            }
+            .level-option:hover {
+                border-color: var(--xps-text-muted);
+                color: var(--xps-text);
+                transform: translateY(-1px);
+            }
+            .level-option.selected {
+                color: #fff;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+            .level-option .level-num {
+                display: block;
+                font-size: 1.2rem;
+                margin-bottom: 3px;
+            }
+
+            /* Tooltip */
+            .level-option .level-tip {
+                display: none;
+                position: absolute;
+                bottom: calc(100% + 10px);
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--xps-charcoal-dark);
+                border: 1px solid var(--xps-border);
+                color: var(--xps-text);
+                font-size: 0.9rem;
+                font-weight: 400;
+                padding: 10px 14px;
+                border-radius: 8px;
+                width: 260px;
+                white-space: normal;
+                text-align: left;
+                line-height: 1.5;
+                z-index: 50;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+                pointer-events: none;
+            }
+            .level-option .level-tip::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                border: 6px solid transparent;
+                border-top-color: var(--xps-charcoal-dark);
+            }
+            .level-option:hover .level-tip {
+                display: block;
+            }
+
+            /* ─── DETAIL PANEL ─── */
+            .detail-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 200;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+            }
+            .detail-overlay.open {
+                display: flex;
+            }
+            .detail-panel {
+                background: var(--xps-card-bg);
+                border: 1px solid var(--xps-border);
+                border-radius: 12px;
+                max-width: 640px;
+                width: 100%;
+                max-height: 80vh;
+                overflow-y: auto;
+                padding: 32px;
+            }
+            .detail-panel h2 {
+                font-size: 1.3rem;
+                color: var(--xps-blue);
+                margin-bottom: 4px;
+            }
+            .detail-panel .detail-category {
+                font-size: 0.8rem;
+                color: var(--xps-text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 20px;
+            }
+            .detail-panel h3 {
+                font-size: 0.95rem;
+                color: var(--xps-text);
+                margin: 20px 0 10px;
+                padding-bottom: 6px;
+                border-bottom: 1px solid var(--xps-border);
+            }
+            .detail-panel p,
+            .detail-panel li {
+                font-size: 0.95rem;
+                color: var(--xps-text-muted);
+                line-height: 1.7;
+            }
+            .detail-panel ul {
+                padding-left: 20px;
+            }
+            .detail-panel li {
+                margin-bottom: 6px;
+            }
+            .detail-your-level {
+                display: inline-block;
+                padding: 4px 12px;
+                border-radius: 5px;
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 16px;
+            }
+            .detail-your-level.unrated {
+                background: var(--xps-charcoal);
+                color: var(--xps-text-muted);
+            }
+            .level-desc {
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+                margin-bottom: 10px;
+                padding: 8px;
+                border-radius: 6px;
+                transition: background 0.2s;
+            }
+            .level-desc.current {
+                background: rgba(74, 159, 217, 0.08);
+                border: 1px solid rgba(74, 159, 217, 0.2);
+            }
+            .level-desc .level-tag {
+                flex-shrink: 0;
+                padding: 3px 10px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #fff;
+                min-width: 85px;
+                text-align: center;
+            }
+            .level-desc p {
+                margin: 0;
+            }
+            .detail-close {
+                float: right;
+                background: none;
+                border: 1px solid var(--xps-border);
+                color: var(--xps-text-muted);
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 1.1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+            }
+            .detail-close:hover {
+                color: var(--xps-danger);
+                border-color: var(--xps-danger);
+            }
+
+            /* ─── COMPLETION OVERLAY ─── */
+            .completion-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 300;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+            }
+            .completion-overlay.open {
+                display: flex;
+            }
+            .completion-panel {
+                background: var(--xps-card-bg);
+                border: 2px solid var(--xps-success);
+                border-radius: 14px;
+                padding: 40px;
+                text-align: center;
+                max-width: 480px;
+                width: 100%;
+                animation: popIn 0.3s ease;
+            }
+            @keyframes popIn {
+                from { transform: scale(0.9); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+            }
+            .completion-panel .completion-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                background: var(--xps-success);
+                color: #fff;
+                font-size: 1.8rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+            }
+            .completion-panel h3 {
+                color: var(--xps-success);
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+            .completion-panel p {
+                color: var(--xps-text-muted);
+                font-size: 1rem;
+                margin-bottom: 24px;
+                line-height: 1.6;
+            }
+            .completion-panel .completion-actions {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+            }
+            .completion-panel button {
+                padding: 12px 28px;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .completion-panel .btn-export {
+                background: var(--xps-success);
+                color: #fff;
+            }
+            .completion-panel .btn-export:hover {
+                background: #43a047;
+            }
+            .completion-panel .btn-dismiss {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--xps-border);
+                color: var(--xps-text-muted);
+            }
+            .completion-panel .btn-dismiss:hover {
+                color: var(--xps-text);
+                border-color: var(--xps-text-muted);
+            }
+
+            /* ─── LANDING PAGE ─── */
+            .landing-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: var(--xps-dark-bg);
+                z-index: 400;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+            }
+            .landing-overlay.open {
+                display: flex;
+            }
+            .landing-card {
+                background: var(--xps-card-bg);
+                border: 1px solid var(--xps-border);
+                border-radius: 14px;
+                max-width: 560px;
+                width: 100%;
+                padding: 48px 40px;
+                animation: popIn 0.3s ease;
+            }
+            .landing-card .landing-logo {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 32px;
+            }
+            .landing-card .landing-logo svg {
+                height: 32px;
+                width: auto;
+            }
+            .landing-card .landing-logo span {
+                font-size: 1.1rem;
+                color: var(--xps-text-muted);
+                font-weight: 300;
+            }
+            .landing-card h1 {
+                font-size: 1.6rem;
+                font-weight: 700;
+                color: var(--xps-text);
+                margin-bottom: 12px;
+            }
+            .landing-card .landing-intro {
+                font-size: 1rem;
+                color: var(--xps-text-muted);
+                line-height: 1.7;
+                margin-bottom: 28px;
+            }
+            .landing-steps {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 32px;
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+            }
+            .landing-steps li {
+                display: flex;
+                align-items: flex-start;
+                gap: 14px;
+                font-size: 0.95rem;
+                color: var(--xps-text);
+                line-height: 1.5;
+            }
+            .landing-step-num {
+                flex-shrink: 0;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                background: var(--xps-blue);
+                color: #fff;
+                font-size: 0.8rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .landing-step-text {
+                padding-top: 3px;
+            }
+            .landing-time {
+                font-size: 0.85rem;
+                color: var(--xps-text-muted);
+                margin-bottom: 28px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .landing-start {
+                display: block;
+                width: 100%;
+                padding: 16px;
+                background: var(--xps-blue);
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                font-size: 1.1rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .landing-start:hover {
+                background: var(--xps-blue-dark);
+            }
+
+            /* ─── RESPONSIVE ─── */
+            @media (max-width: 600px) {
+                .header-bar {
+                    flex-wrap: wrap;
+                    gap: 10px;
+                }
+                .name-section {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                .level-selector {
+                    flex-wrap: wrap;
+                }
+                .level-option {
+                    min-width: calc(50% - 5px);
+                    flex: 0 0 auto;
+                }
+                .level-option .level-tip {
+                    display: none !important;
+                }
+            }
+        </style>
+        <script src="skills-config.js"></script>
+    </head>
+    <body>
+        <!-- HEADER -->
+        <div class="header-bar">
+            <div class="logo-container">
+                <svg
+                    viewBox="0 0 50 50"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <polygon
+                        points="5,8 20,25 5,42 12,42 25,29 25,25 12,8"
+                        fill="#4A9FD9"
+                    />
+                    <polygon
+                        points="45,8 38,8 25,21 25,25 38,42 45,42 30,25"
+                        fill="#4A9FD9"
+                    />
+                    <polygon points="25,21 25,29 30,25 25,21" fill="#3D8BBF" />
+                </svg>
+                <span class="logo-text"><strong>XPS</strong> Group</span>
+                <div class="logo-divider"></div>
+                <span class="app-title">My Skills</span>
+            </div>
+            <div class="header-actions">
+                <div class="profile-toggle" id="profileToggle"></div>
+                <div class="logo-divider"></div>
+                <button
+                    class="header-btn"
+                    onclick="document.getElementById('jsonImport').click()"
+                    title="Load a previously exported assessment"
+                >
+                    Load JSON
+                </button>
+                <input
+                    type="file"
+                    id="jsonImport"
+                    accept=".json"
+                    style="display: none"
+                    onchange="importJSON(this)"
+                />
+                <button
+                    class="header-btn primary"
+                    id="exportBtn"
+                    onclick="exportJSON()"
+                    disabled
+                >
+                    Save &amp; Export
+                </button>
+                <button
+                    class="header-btn danger"
+                    onclick="resetAll()"
+                    title="Clear all ratings and start fresh"
+                >
+                    Reset
+                </button>
+                <div class="logo-divider"></div>
+                <div class="theme-toggle">
+                    <button class="active" onclick="setTheme('dark')">
+                        Dark
+                    </button>
+                    <button onclick="setTheme('light')">Light</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN -->
+        <div class="app-container">
+            <div class="name-section">
+                <label for="nameInput">Your name</label>
+                <input
+                    type="text"
+                    id="nameInput"
+                    placeholder="Enter your full name..."
+                    oninput="onNameChange()"
+                />
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-label" id="progressLabel"></div>
+            </div>
+
+            <div class="radar-section" id="radarSection">
+                <div class="radar-header" onclick="toggleRadar()">
+                    <h3>Your Skill Profile</h3>
+                    <span class="radar-chevron" id="radarChevron">&#9660;</span>
+                </div>
+                <div class="radar-body" id="radarBody">
+                    <canvas id="radarCanvas"></canvas>
+                    <button class="header-btn" style="margin-top:12px" onclick="saveRadarImage()">Save as Image</button>
+                </div>
+            </div>
+
+            <div id="skillCards"></div>
+        </div>
+
+        <!-- LANDING PAGE -->
+        <div class="landing-overlay" id="landingOverlay">
+            <div class="landing-card">
+                <div class="landing-logo">
+                    <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="5,8 20,25 5,42 12,42 25,29 25,25 12,8" fill="#4A9FD9"/>
+                        <polygon points="45,8 38,8 25,21 25,25 38,42 45,42 30,25" fill="#4A9FD9"/>
+                        <polygon points="25,21 25,29 30,25 25,21" fill="#3D8BBF"/>
+                    </svg>
+                    <span>Skills Self-Assessment</span>
+                </div>
+                <h1>Welcome to My Skills</h1>
+                <p class="landing-intro">
+                    This is a quick self-assessment to capture your current skill levels across the team.
+                </p>
+                <ol class="landing-steps">
+                    <li>
+                        <span class="landing-step-num">1</span>
+                        <span class="landing-step-text">Enter your name at the top</span>
+                    </li>
+                    <li>
+                        <span class="landing-step-num">2</span>
+                        <span class="landing-step-text">Rate yourself across each skill — hover over a level to see what it means, or tap <strong>"What does this mean?"</strong> for full detail</span>
+                    </li>
+                    <li>
+                        <span class="landing-step-num">3</span>
+                        <span class="landing-step-text">When you're done, hit <strong>Save &amp; Export</strong> and send the JSON file to your line manager</span>
+                    </li>
+                </ol>
+                <p class="landing-time">Takes around 10 minutes. Your progress is saved automatically.</p>
+                <button class="landing-start" onclick="dismissLanding()">Get Started</button>
+            </div>
+        </div>
+
+        <!-- DETAIL OVERLAY -->
+        <div
+            class="detail-overlay"
+            id="detailOverlay"
+            onclick="if (event.target === this) closeDetail();"
+        >
+            <div class="detail-panel" id="detailPanel"></div>
+        </div>
+
+        <!-- COMPLETION OVERLAY -->
+        <div
+            class="completion-overlay"
+            id="completionOverlay"
+            onclick="if (event.target === this) dismissCompletion();"
+        >
+            <div class="completion-panel">
+                <div class="completion-icon">&#10003;</div>
+                <h3>All skills rated</h3>
+                <p>Your self-assessment is complete. Export it and send the JSON file to your line manager.</p>
+                <div class="completion-actions">
+                    <button class="btn-export" onclick="exportJSON(); dismissCompletion();">Save &amp; Export JSON</button>
+                    <button class="btn-dismiss" onclick="dismissCompletion()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // ─── DERIVED FROM CONFIG ───
+            const LEVEL_LABELS = LEVELS.map((l) => l.label);
+            const LEVEL_COLORS = LEVELS.map((l) => l.color);
+            const NUM_LEVELS = LEVELS.length - 1;
+            const allSkills = SKILLS.flatMap((c) => c.skills);
+            const totalSkills = allSkills.length;
+
+            // Info icon SVG reused in skill rows
+            const INFO_ICON =
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+
+            // ─── PROFILE KEY ───
+            const PROFILE =
+                new URLSearchParams(window.location.search).get("profile") ||
+                "coder";
+            const STORAGE_KEY = "mySkills_" + PROFILE;
+
+            // Build profile toggle
+            (function () {
+                const profiles = [
+                    { key: "coder", label: "Coders" },
+                    { key: "analyst", label: "Analysts" },
+                ];
+                const toggle = document.getElementById("profileToggle");
+                for (const p of profiles) {
+                    const btn = document.createElement("button");
+                    btn.textContent = p.label;
+                    if (p.key === PROFILE) btn.classList.add("active");
+                    btn.onclick = function () {
+                        if (p.key === PROFILE) return;
+                        const url = new URL(window.location);
+                        url.searchParams.set("profile", p.key);
+                        window.location.href = url.toString();
+                    };
+                    toggle.appendChild(btn);
+                }
+            })();
+
+            // ─── STATE ───
+            let ratings = {};
+            let userName = "";
+            let completionShown = false;
+
+            (function loadSaved() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        userName = data.name || "";
+                        ratings = data.ratings || {};
+                    }
+                } catch (e) {}
+            })();
+
+            function saveLocal() {
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify({ name: userName, ratings }),
+                );
+            }
+
+            // ─── THEME ───
+            function setTheme(t) {
+                if (t === "light")
+                    document.documentElement.setAttribute(
+                        "data-theme",
+                        "light",
+                    );
+                else document.documentElement.removeAttribute("data-theme");
+                document
+                    .querySelectorAll(".theme-toggle button")
+                    .forEach((b) => b.classList.remove("active"));
+                document
+                    .querySelector(
+                        `.theme-toggle button:${t === "dark" ? "first" : "last"}-child`,
+                    )
+                    .classList.add("active");
+                localStorage.setItem("mySkillsTheme", t);
+            }
+            (function () {
+                const t = localStorage.getItem("mySkillsTheme");
+                if (t) setTheme(t);
+            })();
+
+            // ─── NAME ───
+            function onNameChange() {
+                userName = document.getElementById("nameInput").value.trim();
+                saveLocal();
+                updateExportBtn();
+            }
+
+            function updateExportBtn() {
+                const filled = Object.values(ratings).filter(
+                    (r) => r > 0,
+                ).length;
+                document.getElementById("exportBtn").disabled =
+                    !userName || filled === 0;
+            }
+
+            // ─── PROGRESS ───
+            function updateProgress() {
+                const filled = Object.values(ratings).filter(
+                    (r) => r > 0,
+                ).length;
+                const pct = Math.round((filled / totalSkills) * 100);
+                const fill = document.getElementById("progressFill");
+                fill.style.width = pct + "%";
+                fill.classList.toggle("complete", pct === 100);
+                document.getElementById("progressLabel").textContent =
+                    `${filled} of ${totalSkills} skills rated (${pct}%)`;
+                updateExportBtn();
+
+                // Update category counts and completion state
+                for (const cat of SKILLS) {
+                    const catFilled = cat.skills.filter(
+                        (s) => (ratings[s.id] || 0) > 0,
+                    ).length;
+                    const isComplete = catFilled === cat.skills.length;
+                    const countEl = document.getElementById(
+                        "count-" + slugify(cat.category),
+                    );
+                    if (countEl) {
+                        countEl.textContent = isComplete
+                            ? "Complete"
+                            : `${catFilled} / ${cat.skills.length}`;
+                    }
+                    const card = document.getElementById(
+                        "card-" + slugify(cat.category),
+                    );
+                    if (card) card.classList.toggle("complete", isComplete);
+                }
+
+                // Update radar chart
+                drawRadar();
+
+                // Completion overlay — show once when hitting 100%
+                if (pct === 100 && !completionShown) {
+                    completionShown = true;
+                    document.getElementById("completionOverlay").classList.add("open");
+                } else if (pct < 100) {
+                    completionShown = false;
+                }
+            }
+
+            // ─── RADAR CHART ───
+            function drawRadarOnCtx(ctx, cssW, cssH) {
+                const cx = cssW / 2, cy = cssH / 2;
+                const radius = 120;
+                const categories = SKILLS.map(c => c.category);
+                const n = categories.length;
+                const angleStep = (2 * Math.PI) / n;
+                const startAngle = -Math.PI / 2;
+
+                const values = SKILLS.map(cat => {
+                    const total = cat.skills.reduce((sum, s) => sum + (ratings[s.id] || 0), 0);
+                    return total / cat.skills.length;
+                });
+
+                const styles = getComputedStyle(document.documentElement);
+                const textColor = styles.getPropertyValue("--xps-text-muted").trim() || "#8a9499";
+                const gridColor = styles.getPropertyValue("--xps-border").trim() || "rgba(255,255,255,0.1)";
+                const blueColor = styles.getPropertyValue("--xps-blue").trim() || "#4a9fd9";
+
+                // Grid rings
+                for (let ring = 1; ring <= NUM_LEVELS; ring++) {
+                    const r = (ring / NUM_LEVELS) * radius;
+                    ctx.beginPath();
+                    for (let i = 0; i <= n; i++) {
+                        const angle = startAngle + i * angleStep;
+                        const x = cx + r * Math.cos(angle);
+                        const y = cy + r * Math.sin(angle);
+                        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                    }
+                    ctx.strokeStyle = gridColor;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                // Axis lines
+                for (let i = 0; i < n; i++) {
+                    const angle = startAngle + i * angleStep;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+                    ctx.strokeStyle = gridColor;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                // Data shape
+                ctx.beginPath();
+                for (let i = 0; i <= n; i++) {
+                    const idx = i % n;
+                    const angle = startAngle + idx * angleStep;
+                    const r = (values[idx] / NUM_LEVELS) * radius;
+                    const x = cx + r * Math.cos(angle);
+                    const y = cy + r * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                const hex = blueColor.replace("#", "");
+                const rr = parseInt(hex.substring(0, 2), 16);
+                const gg = parseInt(hex.substring(2, 4), 16);
+                const bb = parseInt(hex.substring(4, 6), 16);
+                ctx.fillStyle = `rgba(${rr}, ${gg}, ${bb}, 0.25)`;
+                ctx.fill();
+                ctx.strokeStyle = blueColor;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                // Data points
+                for (let i = 0; i < n; i++) {
+                    const angle = startAngle + i * angleStep;
+                    const r = (values[i] / NUM_LEVELS) * radius;
+                    const x = cx + r * Math.cos(angle);
+                    const y = cy + r * Math.sin(angle);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                    ctx.fillStyle = blueColor;
+                    ctx.fill();
+                    ctx.strokeStyle = "#fff";
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                // Labels
+                ctx.textBaseline = "middle";
+                for (let i = 0; i < n; i++) {
+                    const angle = startAngle + i * angleStep;
+                    const labelR = radius + 30;
+                    const x = cx + labelR * Math.cos(angle);
+                    const y = cy + labelR * Math.sin(angle);
+                    const avg = values[i].toFixed(1);
+                    const label = categories[i];
+
+                    ctx.textAlign = Math.abs(Math.cos(angle)) < 0.01 ? "center"
+                        : Math.cos(angle) > 0 ? "left" : "right";
+
+                    ctx.font = "bold 13px 'Segoe UI', sans-serif";
+                    ctx.fillStyle = textColor;
+                    ctx.fillText(label, x, y - 8);
+
+                    ctx.font = "12px 'Segoe UI', sans-serif";
+                    ctx.fillStyle = blueColor;
+                    ctx.fillText(avg + " / " + NUM_LEVELS, x, y + 10);
+                }
+            }
+
+            function drawRadar() {
+                const canvas = document.getElementById("radarCanvas");
+                const ctx = canvas.getContext("2d");
+                const dpr = window.devicePixelRatio || 1;
+                const cssW = 600, cssH = 360;
+                canvas.width = cssW * dpr;
+                canvas.height = cssH * dpr;
+                canvas.style.width = cssW + "px";
+                canvas.style.height = cssH + "px";
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, cssW, cssH);
+                drawRadarOnCtx(ctx, cssW, cssH);
+            }
+
+            function saveRadarImage() {
+                const dpr = window.devicePixelRatio || 1;
+                const cssW = 600, cssH = 400;
+                const offscreen = document.createElement("canvas");
+                offscreen.width = cssW * dpr;
+                offscreen.height = cssH * dpr;
+                const ctx = offscreen.getContext("2d");
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                // Solid background
+                const bgColor = getComputedStyle(document.documentElement).getPropertyValue("--xps-card-bg").trim() || "#232a2e";
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, cssW, cssH);
+
+                // Name heading
+                const styles = getComputedStyle(document.documentElement);
+                const textColor = styles.getPropertyValue("--xps-text").trim() || "#f0f2f3";
+                const name = userName || "Unnamed";
+                ctx.font = "bold 16px 'Segoe UI', sans-serif";
+                ctx.fillStyle = textColor;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "top";
+                ctx.fillText(name + " — Skill Profile", cssW / 2, 16);
+
+                // Draw the radar chart offset down to make room for the name
+                ctx.save();
+                ctx.translate(0, 40);
+                drawRadarOnCtx(ctx, cssW, 360);
+                ctx.restore();
+
+                // Download
+                const a = document.createElement("a");
+                const safeName = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                a.download = `skill-profile-${safeName}.png`;
+                a.href = offscreen.toDataURL("image/png");
+                a.click();
+            }
+
+            function toggleRadar() {
+                const body = document.getElementById("radarBody");
+                const chev = document.getElementById("radarChevron");
+                const collapsing = !body.classList.contains("collapsed");
+                body.classList.toggle("collapsed");
+                chev.style.transform = collapsing ? "rotate(-90deg)" : "";
+                localStorage.setItem("mySkills_radarOpen_" + PROFILE, collapsing ? "0" : "1");
+            }
+
+            // Restore radar collapse state (collapsed by default)
+            (function () {
+                const saved = localStorage.getItem("mySkills_radarOpen_" + PROFILE);
+                if (saved !== "1") {
+                    document.getElementById("radarBody").classList.add("collapsed");
+                    document.getElementById("radarChevron").style.transform = "rotate(-90deg)";
+                }
+            })();
+
+            // ─── SELECT LEVEL ───
+            function selectLevel(skillId, level) {
+                if (ratings[skillId] === level) {
+                    delete ratings[skillId];
+                } else {
+                    ratings[skillId] = level;
+                }
+                saveLocal();
+                updateProgress();
+                renderSkillButtons(skillId);
+
+                // Update row rated state
+                const row = document.getElementById("row-" + skillId);
+                if (row)
+                    row.classList.toggle(
+                        "rated",
+                        (ratings[skillId] || 0) > 0,
+                    );
+            }
+
+            function renderSkillButtons(skillId) {
+                const container = document.getElementById("btns-" + skillId);
+                if (!container) return;
+                const current = ratings[skillId] || 0;
+                const buttons = container.querySelectorAll(".level-option");
+                buttons.forEach((btn) => {
+                    const lvl = parseInt(btn.dataset.level);
+                    btn.classList.toggle("selected", lvl === current);
+                    if (lvl === current) {
+                        btn.style.background = LEVEL_COLORS[lvl];
+                        btn.style.borderColor = LEVEL_COLORS[lvl];
+                    } else {
+                        btn.style.background = "";
+                        btn.style.borderColor = "";
+                    }
+                });
+            }
+
+            // ─── DETAIL PANEL ───
+            function showDetail(skillId) {
+                let skill = null,
+                    cat = null;
+                for (const c of SKILLS) {
+                    for (const s of c.skills) {
+                        if (s.id === skillId) {
+                            skill = s;
+                            cat = c.category;
+                            break;
+                        }
+                    }
+                    if (skill) break;
+                }
+                if (!skill) return;
+
+                const h = UI_TEXT.detailHeadings;
+                const currentLevel = ratings[skillId] || 0;
+                const panel = document.getElementById("detailPanel");
+
+                const yourLevelHtml =
+                    currentLevel > 0
+                        ? `<span class="detail-your-level" style="background:${LEVEL_COLORS[currentLevel]}">Your rating: ${LEVEL_LABELS[currentLevel]}</span>`
+                        : `<span class="detail-your-level unrated">Not yet rated</span>`;
+
+                panel.innerHTML = `
+                    <button class="detail-close" onclick="closeDetail()">&times;</button>
+                    <h2>${skill.name}</h2>
+                    <div class="detail-category">${cat}</div>
+                    ${yourLevelHtml}
+                    <h3>${h.description}</h3>
+                    <p>${skill.description}</p>
+                    <h3>${h.levels}</h3>
+                    ${skill.levels
+                        .map(
+                            (desc, i) => `
+                        <div class="level-desc${i + 1 === currentLevel ? " current" : ""}">
+                            <span class="level-tag" style="background:${LEVEL_COLORS[i + 1]}">${LEVEL_LABELS[i + 1]}</span>
+                            <p>${desc}</p>
+                        </div>
+                    `,
+                        )
+                        .join("")}
+                    <h3>${h.improve}</h3>
+                    <ul>
+                        ${skill.improve
+                            .map(
+                                (tip, i) =>
+                                    `<li><strong>${LEVEL_LABELS[i + 1]}→${LEVEL_LABELS[Math.min(i + 2, NUM_LEVELS)]}:</strong> ${tip}</li>`,
+                            )
+                            .join("")}
+                    </ul>
+                `;
+                document.getElementById("detailOverlay").classList.add("open");
+            }
+
+            function closeDetail() {
+                document
+                    .getElementById("detailOverlay")
+                    .classList.remove("open");
+            }
+
+            // ─── COMPLETION ───
+            function dismissCompletion() {
+                document.getElementById("completionOverlay").classList.remove("open");
+            }
+
+            // ─── TOGGLE CATEGORY ───
+            function toggleCategory(slug) {
+                const body = document.getElementById("body-" + slug);
+                const chevron = document.getElementById("chev-" + slug);
+                if (body) {
+                    const collapsing = !body.classList.contains("collapsed");
+                    body.classList.toggle("collapsed");
+                    if (chevron)
+                        chevron.style.transform = collapsing
+                            ? "rotate(-90deg)"
+                            : "";
+                }
+            }
+
+            // ─── RESET ───
+            function resetAll() {
+                if (
+                    !confirm(
+                        "This will clear your name and all ratings. Are you sure?",
+                    )
+                )
+                    return;
+                userName = "";
+                ratings = {};
+                saveLocal();
+                render();
+            }
+
+            // ─── IMPORT JSON ───
+            function importJSON(input) {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+
+                        // Check profile matches
+                        const fileProfile = data.profile || "coder";
+                        if (fileProfile !== PROFILE) {
+                            alert(
+                                `This is a ${fileProfile} assessment but you are in the ${PROFILE} view.\n\nSwitch to the ${fileProfile} profile first, then try again.`,
+                            );
+                            return;
+                        }
+
+                        if (data.name) {
+                            userName = data.name;
+                        }
+                        if (data.ratings) {
+                            for (const [skillId, val] of Object.entries(
+                                data.ratings,
+                            )) {
+                                const level =
+                                    typeof val === "object" ? val.level : val;
+                                if (level >= 1 && level <= NUM_LEVELS) {
+                                    ratings[skillId] = level;
+                                }
+                            }
+                        }
+                        saveLocal();
+                        render();
+                    } catch (err) {
+                        alert(
+                            "Could not read that file. Is it a valid skills JSON?",
+                        );
+                    }
+                };
+                reader.readAsText(file);
+                input.value = "";
+            }
+
+            // ─── EXPORT JSON ───
+            function exportJSON() {
+                if (!userName) {
+                    alert("Please enter your name before exporting.");
+                    return;
+                }
+
+                const data = {
+                    name: userName,
+                    profile: PROFILE,
+                    date: new Date().toISOString().split("T")[0],
+                    ratings: {},
+                };
+
+                for (const skill of allSkills) {
+                    const level = ratings[skill.id] || 0;
+                    if (level > 0) {
+                        data.ratings[skill.id] = {
+                            level: level,
+                            label: LEVEL_LABELS[level],
+                        };
+                    }
+                }
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], {
+                    type: "application/json",
+                });
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                const safeName = userName
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-");
+                a.download = `skills-${safeName}.json`;
+                a.click();
+            }
+
+            // ─── RENDER ───
+            function render() {
+                document.getElementById("nameInput").value = userName;
+
+                const container = document.getElementById("skillCards");
+                let html = "";
+
+                for (const cat of SKILLS) {
+                    const slug = slugify(cat.category);
+                    const catFilled = cat.skills.filter(
+                        (s) => (ratings[s.id] || 0) > 0,
+                    ).length;
+                    const isComplete = catFilled === cat.skills.length;
+
+                    // Auto-collapse completed categories on initial render
+                    const collapsed = isComplete ? " collapsed" : "";
+                    const chevRotate = isComplete
+                        ? ' style="transform:rotate(-90deg)"'
+                        : "";
+
+                    html += `
+                        <div class="category-card${isComplete ? " complete" : ""}" id="card-${slug}">
+                            <div class="category-header" onclick="toggleCategory('${slug}')">
+                                <span class="category-title">
+                                    <span class="category-check">&#10003;</span>
+                                    ${cat.category}
+                                </span>
+                                <span class="category-count">
+                                    <span id="count-${slug}">${isComplete ? "Complete" : `${catFilled} / ${cat.skills.length}`}</span>
+                                    <span class="category-chevron" id="chev-${slug}"${chevRotate}>&#9660;</span>
+                                </span>
+                            </div>
+                            <div class="category-body${collapsed}" id="body-${slug}">
+                    `;
+
+                    for (const skill of cat.skills) {
+                        const isRated = (ratings[skill.id] || 0) > 0;
+
+                        html += `
+                            <div class="skill-row${isRated ? " rated" : ""}" id="row-${skill.id}">
+                                <div class="skill-top">
+                                    <span class="skill-name">${skill.name}</span>
+                                    <button class="skill-info-link" onclick="showDetail('${skill.id}')">
+                                        ${INFO_ICON} What does this mean?
+                                    </button>
+                                </div>
+                                <div class="level-selector" id="btns-${skill.id}">
+                        `;
+
+                        for (let i = 1; i <= NUM_LEVELS; i++) {
+                            const selected = ratings[skill.id] === i;
+                            const style = selected
+                                ? `background:${LEVEL_COLORS[i]};border-color:${LEVEL_COLORS[i]}`
+                                : "";
+                            const tipText =
+                                skill.levels[i - 1] || LEVEL_LABELS[i];
+                            html += `
+                                <button
+                                    class="level-option${selected ? " selected" : ""}"
+                                    data-level="${i}"
+                                    style="${style}"
+                                    onclick="selectLevel('${skill.id}', ${i})"
+                                >
+                                    <span class="level-tip">${tipText}</span>
+                                    <span class="level-num">${i}</span>
+                                    ${LEVEL_LABELS[i]}
+                                </button>
+                            `;
+                        }
+
+                        html += `
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+                updateProgress();
+            }
+
+            // ─── UTILS ───
+            function slugify(s) {
+                return s
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/(^-|-$)/g, "");
+            }
+
+            // ─── KEYBOARD ───
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") closeDetail();
+            });
+
+            // ─── LANDING PAGE ───
+            function showLanding() {
+                // Show landing if user has never dismissed it AND has no existing data
+                const dismissed = localStorage.getItem("mySkills_landingSeen_" + PROFILE);
+                const hasData = userName || Object.keys(ratings).length > 0;
+                if (!dismissed && !hasData) {
+                    document.getElementById("landingOverlay").classList.add("open");
+                }
+            }
+
+            function dismissLanding() {
+                document.getElementById("landingOverlay").classList.remove("open");
+                localStorage.setItem("mySkills_landingSeen_" + PROFILE, "1");
+                document.getElementById("nameInput").focus();
+            }
+
+            // ─── INIT ───
+            // If already at 100% on load, don't re-trigger the completion overlay
+            const alreadyComplete = Object.values(ratings).filter(r => r > 0).length === totalSkills;
+            if (alreadyComplete) completionShown = true;
+
+            render();
+            showLanding();
+        </script>
+    </body>
+</html>
