@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills Matrix — Config Editor</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --xps-blue: #4a9fd9;
+            --xps-blue-light: #6bb3e3;
+            --xps-blue-dark: #3b8ac4;
+            --xps-charcoal: #2d3539;
+            --xps-charcoal-light: #3d474c;
+            --xps-charcoal-dark: #1e2528;
+            --xps-dark-bg: #161b1e;
+            --xps-card-bg: #232a2e;
+            --xps-text: #f0f2f3;
+            --xps-text-muted: #8a9499;
+            --xps-border: rgba(255, 255, 255, 0.1);
+            --xps-success: #4caf50;
+            --xps-warning: #ff9800;
+            --xps-danger: #f44336;
+            --xps-purple: #9c27b0;
+            --xps-accent: #26c6da;
+            --level-1: #5c6bc0;
+            --level-2: #26a69a;
+            --level-3: #ff9800;
+            --level-4: #ef5350;
+        }
+
+        [data-theme="light"] {
+            --xps-charcoal: #e8eaec;
+            --xps-charcoal-light: #f5f6f7;
+            --xps-charcoal-dark: #d0d4d8;
+            --xps-dark-bg: #f0f2f4;
+            --xps-card-bg: #ffffff;
+            --xps-text: #1e2528;
+            --xps-text-muted: #5a6469;
+            --xps-border: rgba(0, 0, 0, 0.1);
+        }
+
+        html { scrollbar-gutter: stable; }
+
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--xps-dark-bg);
+            min-height: 100vh;
+            color: var(--xps-text);
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        /* ─── HEADER ─── */
+        .header-bar {
+            background: var(--xps-charcoal);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid var(--xps-blue);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo-container {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+        }
+        .logo-container svg { height: 36px; width: auto; align-self: center; }
+        .logo-text { font-size: 1.4rem; font-weight: 400; color: var(--xps-text); letter-spacing: -0.5px; }
+        .logo-text strong { font-weight: 700; }
+        .logo-divider { width: 1px; height: 24px; background: var(--xps-border); align-self: center; }
+        .app-title { font-size: 1.1rem; font-weight: 300; color: var(--xps-text-muted); }
+        .header-actions { display: flex; gap: 8px; align-items: center; }
+
+        .header-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--xps-border);
+            border-radius: 6px;
+            color: var(--xps-text-muted);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .header-btn:hover { color: var(--xps-blue); background: rgba(74,159,217,0.15); border-color: var(--xps-blue); }
+        .header-btn.primary { background: var(--xps-blue); border-color: var(--xps-blue); color: #fff; font-weight: 600; }
+        .header-btn.primary:hover { background: var(--xps-blue-dark); }
+        .header-btn.danger:hover { color: var(--xps-danger); background: rgba(244,67,54,0.15); border-color: var(--xps-danger); }
+
+        .theme-toggle {
+            display: flex; background: rgba(0,0,0,0.2); border-radius: 6px; padding: 3px; gap: 2px;
+        }
+        .theme-toggle button {
+            padding: 6px 12px; border: none; background: transparent;
+            color: var(--xps-text-muted); font-size: 0.8rem; font-weight: 500;
+            border-radius: 4px; cursor: pointer; transition: all 0.2s;
+        }
+        .theme-toggle button:hover { color: var(--xps-text); }
+        .theme-toggle button.active { background: var(--xps-blue); color: #fff; }
+
+        /* ─── LAYOUT ─── */
+        .main-content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* ─── SECTIONS ─── */
+        .section {
+            background: var(--xps-card-bg);
+            border: 1px solid var(--xps-border);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: var(--xps-charcoal);
+            cursor: pointer;
+            user-select: none;
+        }
+        .section-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--xps-text);
+        }
+        .section-header .chevron {
+            color: var(--xps-text-muted);
+            transition: transform 0.2s;
+            font-size: 0.8rem;
+        }
+        .section-header.collapsed .chevron { transform: rotate(-90deg); }
+        .section-body { padding: 20px; }
+        .section-header.collapsed + .section-body { display: none; }
+
+        /* ─── FORMS ─── */
+        .form-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .form-row.vertical {
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-group label {
+            font-size: 0.8rem;
+            color: var(--xps-text-muted);
+            font-weight: 500;
+        }
+        input[type="text"], input[type="color"], textarea, select {
+            background: var(--xps-charcoal-dark);
+            border: 1px solid var(--xps-border);
+            border-radius: 4px;
+            padding: 8px 10px;
+            color: var(--xps-text);
+            font-size: 0.9rem;
+            font-family: inherit;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--xps-blue);
+        }
+        textarea { resize: vertical; min-height: 60px; }
+        input[type="color"] {
+            width: 40px; height: 36px; padding: 2px; cursor: pointer; flex-shrink: 0;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 6px 12px; border: 1px solid var(--xps-border);
+            border-radius: 4px; background: rgba(255,255,255,0.05);
+            color: var(--xps-text-muted); font-size: 0.8rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn:hover { color: var(--xps-blue); border-color: var(--xps-blue); background: rgba(74,159,217,0.1); }
+        .btn.danger { color: var(--xps-text-muted); }
+        .btn.danger:hover { color: var(--xps-danger); border-color: var(--xps-danger); background: rgba(244,67,54,0.1); }
+        .btn.small { padding: 4px 8px; font-size: 0.75rem; }
+        .btn-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+        /* ─── LEVEL ROWS ─── */
+        .level-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--xps-charcoal-dark);
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+        .level-row .level-num {
+            font-size: 0.75rem;
+            color: var(--xps-text-muted);
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .level-row input[type="text"] { flex: 1; }
+        .level-colour-group {
+            display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+        }
+        .level-colour-group select {
+            width: 170px; font-size: 0.8rem; padding: 6px 8px;
+        }
+        .colour-preview {
+            width: 24px; height: 24px; border-radius: 4px;
+            border: 1px solid var(--xps-border); flex-shrink: 0;
+        }
+
+        /* ─── CATEGORY / SKILL CARDS ─── */
+        .category-card {
+            border: 1px solid var(--xps-border);
+            border-radius: 6px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--xps-charcoal);
+            cursor: pointer;
+            user-select: none;
+        }
+        .category-header .chevron {
+            color: var(--xps-text-muted);
+            transition: transform 0.2s;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+        .category-header.collapsed .chevron { transform: rotate(-90deg); }
+        .category-header input[type="text"] {
+            flex: 1;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 4px 8px;
+        }
+        .category-header input[type="text"]:focus {
+            background: var(--xps-charcoal-dark);
+            border-color: var(--xps-border);
+        }
+        .category-body { padding: 14px; }
+        .category-header.collapsed + .category-body { display: none; }
+        .category-actions {
+            display: flex; gap: 4px; flex-shrink: 0;
+        }
+
+        .skill-card {
+            border: 1px solid var(--xps-border);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--xps-charcoal-dark);
+            cursor: pointer;
+            user-select: none;
+        }
+        .skill-header .chevron {
+            color: var(--xps-text-muted);
+            transition: transform 0.2s;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+        }
+        .skill-header.collapsed .chevron { transform: rotate(-90deg); }
+        .skill-header .skill-name-preview {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--xps-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .skill-body { padding: 12px; }
+        .skill-header.collapsed + .skill-body { display: none; }
+        .skill-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+        .level-textarea-group {
+            margin-bottom: 10px;
+        }
+        .level-textarea-group label {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.8rem; color: var(--xps-text-muted); margin-bottom: 4px;
+        }
+        .level-textarea-group label .level-dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+
+        /* ─── ID FIELD (hidden by default) ─── */
+        .id-field { display: none; }
+        .show-ids .id-field { display: flex; }
+
+        /* ─── PREVIEW ─── */
+        .preview-area {
+            background: var(--xps-charcoal-dark);
+            border: 1px solid var(--xps-border);
+            border-radius: 4px;
+            padding: 16px;
+            font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            max-height: 500px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--xps-text-muted);
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--xps-success); color: #fff; padding: 10px 20px;
+            border-radius: 6px; font-size: 0.9rem; font-weight: 500;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200;
+        }
+        .toast.visible { opacity: 1; }
+
+        /* ─── CONFIRM DIALOG ─── */
+        .dialog-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 300; display: none;
+        }
+        .dialog-overlay.visible { display: flex; }
+        .dialog-box {
+            background: var(--xps-card-bg); border: 1px solid var(--xps-border);
+            border-radius: 8px; padding: 24px; max-width: 400px; width: 90%;
+        }
+        .dialog-box h3 { margin-bottom: 10px; font-size: 1rem; }
+        .dialog-box p { color: var(--xps-text-muted); font-size: 0.9rem; margin-bottom: 16px; }
+        .dialog-box .btn-row { justify-content: flex-end; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 700px) {
+            .header-bar { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+            .main-content { padding: 14px; }
+            .form-row { flex-direction: column; }
+            .level-row { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header-bar">
+        <div class="logo-container">
+            <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="5,8 20,25 5,42 12,42 25,29 25,25 12,8" fill="#4A9FD9"/>
+                <polygon points="45,8 38,8 25,21 25,25 38,42 45,42 30,25" fill="#4A9FD9"/>
+                <polygon points="25,21 25,29 30,25 25,21" fill="#3D8BBF"/>
+            </svg>
+            <span class="logo-text"><strong>XPS</strong> Group</span>
+            <div class="logo-divider"></div>
+            <span class="app-title">Config Editor</span>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" onclick="document.getElementById('fileInput').click()">Load Config</button>
+            <input type="file" id="fileInput" accept=".js" style="display:none" onchange="loadFile(this)" />
+            <button class="header-btn" onclick="startFresh()">New Blank</button>
+            <div class="logo-divider"></div>
+            <button class="header-btn primary" onclick="downloadConfig()">Download .js</button>
+            <div class="logo-divider"></div>
+            <div class="theme-toggle">
+                <button class="active" onclick="setTheme('dark')">Dark</button>
+                <button onclick="setTheme('light')">Light</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- CONFIRM DIALOG -->
+    <div class="dialog-overlay" id="dialogOverlay">
+        <div class="dialog-box">
+            <h3 id="dialogTitle">Confirm</h3>
+            <p id="dialogMsg"></p>
+            <div class="btn-row">
+                <button class="btn" onclick="closeDialog(false)">Cancel</button>
+                <button class="btn danger" onclick="closeDialog(true)">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+
+        <!-- EXPORT SETTINGS -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Export Settings</h2>
+                <span class="chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Profile name (e.g. "analyst", "coder")</label>
+                        <input type="text" id="profileName" value="coder" oninput="markDirty()" />
+                    </div>
+                </div>
+                <p style="font-size:0.8rem; color:var(--xps-text-muted); margin-top:4px;">
+                    Downloads as <code>skills-config-<span id="profileNamePreview">coder</span>.js</code>
+                </p>
+            </div>
+        </div>
+
+        <!-- LEVELS -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Levels</h2>
+                <span class="chevron">&#9660;</span>
+            </div>
+            <div class="section-body" id="levelsSection"></div>
+        </div>
+
+        <!-- SKILLS & CATEGORIES -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Skills &amp; Categories</h2>
+                <span class="chevron">&#9660;</span>
+            </div>
+            <div class="section-body" id="skillsSection">
+                <div class="btn-row" style="margin-bottom:12px;">
+                    <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--xps-text-muted);cursor:pointer;">
+                        <input type="checkbox" id="showIdsToggle" onchange="document.getElementById('skillsContainer').classList.toggle('show-ids', this.checked)" />
+                        Show skill IDs
+                    </label>
+                </div>
+                <div id="skillsContainer"></div>
+                <div class="btn-row">
+                    <button class="btn" onclick="addCategory()">+ Add Category</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PREVIEW & EXPORT -->
+        <div class="section">
+            <div class="section-header collapsed" onclick="toggleSection(this)">
+                <h2>Preview</h2>
+                <span class="chevron">&#9660;</span>
+            </div>
+            <div class="section-body" style="display:none;">
+                <button class="btn" onclick="refreshPreview()" style="margin-bottom:12px;">Refresh Preview</button>
+                <pre class="preview-area" id="previewArea">Click "Refresh Preview" to see generated JS.</pre>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let state = {
+    levels: [
+        { label: "Foundation", color: "var(--level-1)" },
+        { label: "Proficient", color: "var(--level-2)" },
+        { label: "Advanced",   color: "var(--level-3)" },
+        { label: "Expert",     color: "var(--level-4)" },
+    ],
+    categories: [],
+};
+
+let dialogResolve = null;
+
+const COLOUR_OPTIONS = [
+    { label: "Blue (Level 1)",   value: "var(--level-1)" },
+    { label: "Teal (Level 2)",   value: "var(--level-2)" },
+    { label: "Orange (Level 3)", value: "var(--level-3)" },
+    { label: "Red (Level 4)",    value: "var(--level-4)" },
+    { label: "Blue accent",      value: "var(--xps-blue)" },
+    { label: "Green",            value: "var(--xps-success)" },
+    { label: "Purple",           value: "var(--xps-purple)" },
+    { label: "Cyan",             value: "var(--xps-accent)" },
+    { label: "Custom...",        value: "custom" },
+];
+
+// Map CSS var names to actual hex for preview swatches
+const VAR_COLOURS = {
+    "var(--level-1)": "#5c6bc0",
+    "var(--level-2)": "#26a69a",
+    "var(--level-3)": "#ff9800",
+    "var(--level-4)": "#ef5350",
+    "var(--xps-blue)": "#4a9fd9",
+    "var(--xps-success)": "#4caf50",
+    "var(--xps-purple)": "#9c27b0",
+    "var(--xps-accent)": "#26c6da",
+};
+
+// ─────────────────────────────────────────────────────────────
+// THEME
+// ─────────────────────────────────────────────────────────────
+function setTheme(t) {
+    document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "");
+    document.querySelectorAll(".theme-toggle button").forEach(b => {
+        b.classList.toggle("active", b.textContent.trim().toLowerCase() === t);
+    });
+    localStorage.setItem("config-editor-theme", t);
+}
+(function() {
+    const saved = localStorage.getItem("config-editor-theme");
+    if (saved === "light") setTheme("light");
+})();
+
+// ─────────────────────────────────────────────────────────────
+// SECTION TOGGLE
+// ─────────────────────────────────────────────────────────────
+function toggleSection(header) {
+    header.classList.toggle("collapsed");
+    const body = header.nextElementSibling;
+    body.style.display = header.classList.contains("collapsed") ? "none" : "";
+}
+
+// ─────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────
+function showToast(msg, duration = 2000) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("visible");
+    setTimeout(() => el.classList.remove("visible"), duration);
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONFIRM DIALOG
+// ─────────────────────────────────────────────────────────────
+function confirm(title, msg) {
+    return new Promise(resolve => {
+        dialogResolve = resolve;
+        document.getElementById("dialogTitle").textContent = title;
+        document.getElementById("dialogMsg").textContent = msg;
+        document.getElementById("dialogOverlay").classList.add("visible");
+    });
+}
+function closeDialog(result) {
+    document.getElementById("dialogOverlay").classList.remove("visible");
+    if (dialogResolve) { dialogResolve(result); dialogResolve = null; }
+}
+
+function markDirty() {
+    // Update profile name preview
+    const name = document.getElementById("profileName").value.trim() || "config";
+    document.getElementById("profileNamePreview").textContent = name;
+}
+
+// ─────────────────────────────────────────────────────────────
+// LOAD CONFIG FILE
+// ─────────────────────────────────────────────────────────────
+function loadFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const text = e.target.result;
+            const fn = new Function(text + "\n; return { UI_TEXT, LEVELS, SKILLS };");
+            const data = fn();
+            // Parse into state
+            // Levels: skip the first "—" entry
+            state.levels = data.LEVELS.slice(1).map(l => ({
+                label: l.label,
+                color: l.color,
+            }));
+            // Categories
+            state.categories = data.SKILLS.map(cat => ({
+                category: cat.category,
+                skills: cat.skills.map(s => ({
+                    id: s.id,
+                    name: s.name,
+                    description: s.description,
+                    levels: [...s.levels],
+                    improve: [...s.improve],
+                })),
+            }));
+            // Try to guess profile name from filename
+            const match = file.name.match(/skills-config-(.+)\.js$/);
+            if (match) {
+                document.getElementById("profileName").value = match[1];
+            }
+            renderAll();
+            markDirty();
+            showToast("Config loaded: " + file.name);
+        } catch (err) {
+            alert("Failed to parse config file.\n\n" + err.message);
+        }
+    };
+    reader.readAsText(file);
+    input.value = "";
+}
+
+function startFresh() {
+    state = {
+        levels: [
+            { label: "Foundation", color: "var(--level-1)" },
+            { label: "Proficient", color: "var(--level-2)" },
+            { label: "Advanced",   color: "var(--level-3)" },
+            { label: "Expert",     color: "var(--level-4)" },
+        ],
+        categories: [],
+    };
+    document.getElementById("profileName").value = "custom";
+    renderAll();
+    markDirty();
+    showToast("Started blank config");
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER: LEVELS
+// ─────────────────────────────────────────────────────────────
+function renderLevels() {
+    const container = document.getElementById("levelsSection");
+    let html = '<div style="margin-bottom:10px;font-size:0.8rem;color:var(--xps-text-muted);">Level 0 ("—" / unset) is added automatically. Edit the real competency levels below.</div>';
+    state.levels.forEach((lvl, i) => {
+        const previewColour = VAR_COLOURS[lvl.color] || lvl.color;
+        const isCustom = !COLOUR_OPTIONS.some(o => o.value === lvl.color);
+        html += `<div class="level-row">
+            <span class="level-num">${i + 1}</span>
+            <input type="text" value="${esc(lvl.label)}" placeholder="Level name" onchange="state.levels[${i}].label=this.value" />
+            <div class="level-colour-group">
+                <select onchange="handleLevelColourChange(${i}, this)">
+                    ${COLOUR_OPTIONS.map(o => {
+                        const sel = (o.value === lvl.color || (o.value === "custom" && isCustom)) ? "selected" : "";
+                        return `<option value="${o.value}" ${sel}>${o.label}</option>`;
+                    }).join("")}
+                </select>
+                ${isCustom ? `<input type="color" value="${lvl.color}" onchange="state.levels[${i}].color=this.value;renderLevels()" />` : ""}
+                <div class="colour-preview" style="background:${previewColour}"></div>
+            </div>
+            <button class="btn danger small" onclick="removeLevel(${i})" title="Remove level">&times;</button>
+        </div>`;
+    });
+    html += '<div class="btn-row"><button class="btn" onclick="addLevel()">+ Add Level</button></div>';
+    container.innerHTML = html;
+}
+
+function handleLevelColourChange(i, select) {
+    if (select.value === "custom") {
+        state.levels[i].color = "#888888";
+    } else {
+        state.levels[i].color = select.value;
+    }
+    renderLevels();
+}
+
+function addLevel() {
+    if (state.levels.length >= 6) { showToast("Maximum 6 levels"); return; }
+    state.levels.push({ label: "New Level", color: "var(--level-1)" });
+    // Add blank entries to all skills
+    state.categories.forEach(cat => cat.skills.forEach(s => {
+        s.levels.push("");
+        s.improve.push("");
+    }));
+    renderLevels();
+    renderSkills();
+}
+
+async function removeLevel(i) {
+    if (state.levels.length <= 2) { showToast("Minimum 2 levels"); return; }
+    const ok = await confirm("Remove Level", `Remove "${state.levels[i].label}"? This will remove the corresponding level description and improvement tip from every skill.`);
+    if (!ok) return;
+    state.levels.splice(i, 1);
+    state.categories.forEach(cat => cat.skills.forEach(s => {
+        if (s.levels.length > state.levels.length) s.levels.splice(i, 1);
+        if (s.improve.length > state.levels.length) s.improve.splice(i, 1);
+    }));
+    renderLevels();
+    renderSkills();
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER: SKILLS & CATEGORIES
+// ─────────────────────────────────────────────────────────────
+function renderSkills() {
+    const container = document.getElementById("skillsContainer");
+    const numLevels = state.levels.length;
+    let html = "";
+
+    state.categories.forEach((cat, ci) => {
+        html += `<div class="category-card" data-cat="${ci}">
+            <div class="category-header" onclick="toggleCategoryCollapse(this, event)">
+                <span class="chevron">&#9660;</span>
+                <input type="text" value="${esc(cat.category)}" onclick="event.stopPropagation()" onchange="state.categories[${ci}].category=this.value" placeholder="Category name" />
+                <div class="category-actions">
+                    ${ci > 0 ? `<button class="btn small" onclick="event.stopPropagation();moveCategory(${ci},-1)" title="Move up">&#9650;</button>` : ""}
+                    ${ci < state.categories.length - 1 ? `<button class="btn small" onclick="event.stopPropagation();moveCategory(${ci},1)" title="Move down">&#9660;</button>` : ""}
+                    <button class="btn danger small" onclick="event.stopPropagation();removeCategory(${ci})" title="Delete category">&times;</button>
+                </div>
+            </div>
+            <div class="category-body">`;
+
+        cat.skills.forEach((skill, si) => {
+            // Ensure arrays match level count
+            while (skill.levels.length < numLevels) skill.levels.push("");
+            while (skill.improve.length < numLevels) skill.improve.push("");
+
+            html += `<div class="skill-card" data-skill="${si}">
+                <div class="skill-header" onclick="toggleSkillCollapse(this, event)">
+                    <span class="chevron">&#9660;</span>
+                    <span class="skill-name-preview">${esc(skill.name) || "(unnamed skill)"}</span>
+                    <div class="skill-actions">
+                        ${si > 0 ? `<button class="btn small" onclick="event.stopPropagation();moveSkill(${ci},${si},-1)" title="Move up">&#9650;</button>` : ""}
+                        ${si < cat.skills.length - 1 ? `<button class="btn small" onclick="event.stopPropagation();moveSkill(${ci},${si},1)" title="Move down">&#9660;</button>` : ""}
+                        <button class="btn danger small" onclick="event.stopPropagation();removeSkill(${ci},${si})" title="Delete skill">&times;</button>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <div class="form-row id-field">
+                        <div class="form-group">
+                            <label>ID (used in localStorage keys)</label>
+                            <input type="text" value="${esc(skill.id)}" onchange="state.categories[${ci}].skills[${si}].id=this.value" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" value="${esc(skill.name)}" onchange="state.categories[${ci}].skills[${si}].name=this.value;updateSkillPreview(this)" />
+                        </div>
+                    </div>
+                    <div class="form-row vertical">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea onchange="state.categories[${ci}].skills[${si}].description=this.value">${esc(skill.description)}</textarea>
+                        </div>
+                    </div>
+                    <div style="margin-top:12px;margin-bottom:8px;font-size:0.85rem;color:var(--xps-text-muted);font-weight:600;">Level Descriptions</div>`;
+
+            for (let li = 0; li < numLevels; li++) {
+                const levelLabel = state.levels[li].label;
+                const previewColour = VAR_COLOURS[state.levels[li].color] || state.levels[li].color;
+                html += `<div class="level-textarea-group">
+                    <label><span class="level-dot" style="background:${previewColour}"></span> ${esc(levelLabel)}</label>
+                    <textarea onchange="state.categories[${ci}].skills[${si}].levels[${li}]=this.value">${esc(skill.levels[li] || "")}</textarea>
+                </div>`;
+            }
+
+            html += `<div style="margin-top:12px;margin-bottom:8px;font-size:0.85rem;color:var(--xps-text-muted);font-weight:600;">Improvement Tips</div>`;
+
+            for (let li = 0; li < numLevels; li++) {
+                const levelLabel = state.levels[li].label;
+                const previewColour = VAR_COLOURS[state.levels[li].color] || state.levels[li].color;
+                html += `<div class="level-textarea-group">
+                    <label><span class="level-dot" style="background:${previewColour}"></span> ${esc(levelLabel)}</label>
+                    <textarea onchange="state.categories[${ci}].skills[${si}].improve[${li}]=this.value">${esc(skill.improve[li] || "")}</textarea>
+                </div>`;
+            }
+
+            html += `</div></div>`;
+        });
+
+        html += `<div class="btn-row">
+            <button class="btn" onclick="addSkill(${ci})">+ Add Skill</button>
+        </div>
+        </div></div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function toggleCategoryCollapse(header, e) {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;
+    header.classList.toggle("collapsed");
+    const body = header.nextElementSibling;
+    body.style.display = header.classList.contains("collapsed") ? "none" : "";
+}
+
+function toggleSkillCollapse(header, e) {
+    if (e.target.tagName === "BUTTON") return;
+    header.classList.toggle("collapsed");
+    const body = header.nextElementSibling;
+    body.style.display = header.classList.contains("collapsed") ? "none" : "";
+}
+
+function updateSkillPreview(input) {
+    const header = input.closest(".skill-body").previousElementSibling;
+    header.querySelector(".skill-name-preview").textContent = input.value || "(unnamed skill)";
+}
+
+function addCategory() {
+    state.categories.push({ category: "New Category", skills: [] });
+    renderSkills();
+}
+
+async function removeCategory(ci) {
+    const name = state.categories[ci].category;
+    const count = state.categories[ci].skills.length;
+    const ok = await confirm("Delete Category", `Delete "${name}" and its ${count} skill(s)?`);
+    if (!ok) return;
+    state.categories.splice(ci, 1);
+    renderSkills();
+}
+
+function moveCategory(ci, dir) {
+    const target = ci + dir;
+    if (target < 0 || target >= state.categories.length) return;
+    const temp = state.categories[ci];
+    state.categories[ci] = state.categories[target];
+    state.categories[target] = temp;
+    renderSkills();
+}
+
+function generateId(name) {
+    if (!name) return "skill" + Date.now();
+    // camelCase from name
+    return name.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+(.)/g, (_, c) => c.toUpperCase()).replace(/^\w/, c => c.toLowerCase()).replace(/\s+/g, "") || "skill" + Date.now();
+}
+
+function addSkill(ci) {
+    const numLevels = state.levels.length;
+    state.categories[ci].skills.push({
+        id: "newSkill" + Date.now(),
+        name: "",
+        description: "",
+        levels: Array(numLevels).fill(""),
+        improve: Array(numLevels).fill(""),
+    });
+    renderSkills();
+}
+
+async function removeSkill(ci, si) {
+    const name = state.categories[ci].skills[si].name || "(unnamed)";
+    const ok = await confirm("Delete Skill", `Delete "${name}"?`);
+    if (!ok) return;
+    state.categories[ci].skills.splice(si, 1);
+    renderSkills();
+}
+
+function moveSkill(ci, si, dir) {
+    const target = si + dir;
+    const skills = state.categories[ci].skills;
+    if (target < 0 || target >= skills.length) return;
+    const temp = skills[si];
+    skills[si] = skills[target];
+    skills[target] = temp;
+    renderSkills();
+}
+
+// ─────────────────────────────────────────────────────────────
+// READ STATE FROM DOM (sync any unsaved field changes)
+// ─────────────────────────────────────────────────────────────
+function syncStateFromDOM() {
+    // Levels
+    document.querySelectorAll(".level-row").forEach((row, i) => {
+        if (i < state.levels.length) {
+            const textInput = row.querySelector("input[type='text']");
+            if (textInput) state.levels[i].label = textInput.value;
+        }
+    });
+    // Skills: textarea / input changes via onchange should already be synced
+}
+
+// ─────────────────────────────────────────────────────────────
+// GENERATE CONFIG JS
+// ─────────────────────────────────────────────────────────────
+function generateConfigJS() {
+    syncStateFromDOM();
+
+    const indent = "    ";
+    let out = "";
+
+    out += "// " + "─".repeat(61) + "\n";
+    out += "// Skills Matrix — Configuration\n";
+    out += "// Edit this file to customise skills, categories, levels, and UI text.\n";
+    out += "// No changes to index.html needed.\n";
+    out += "// " + "─".repeat(61) + "\n\n";
+
+    // UI_TEXT — fixed defaults
+    const profileName = document.getElementById("profileName").value.trim() || "config";
+    const appTitle = profileName === "coder" ? "Skills Matrix" : "Skills Matrix — " + profileName.charAt(0).toUpperCase() + profileName.slice(1) + "s";
+    const exportFn = profileName === "coder" ? "skills-matrix.csv" : "skills-matrix-" + profileName + "s.csv";
+    out += "// ─── UI TEXT ───\n";
+    out += `const UI_TEXT = {\n`;
+    out += `${indent}appTitle: "${escJS(appTitle)}",\n`;
+    out += `${indent}memberInputPlaceholder: "Team member name...",\n`;
+    out += `${indent}addMemberButton: "+ Add Member",\n`;
+    out += `${indent}skillHeaderHint: "click for detail",\n`;
+    out += `${indent}teamMemberColumn: "Team Member",\n`;
+    out += `${indent}teamAverageLabel: "Team Average",\n`;
+    out += `${indent}emptyStateTitle: "No team members yet",\n`;
+    out += `${indent}emptyStateHint: "Add a team member above to start building the matrix",\n`;
+    out += `${indent}exportFilename: "${escJS(exportFn)}",\n`;
+    out += `${indent}detailHeadings: {\n`;
+    out += `${indent}${indent}description: "What this skill means",\n`;
+    out += `${indent}${indent}levels: "What each level looks like",\n`;
+    out += `${indent}${indent}improve: "How to improve",\n`;
+    out += `${indent}},\n`;
+    out += `};\n\n`;
+
+    // LEVELS (prepend the "—" entry)
+    out += "// ─── LEVELS ───\n";
+    out += "const LEVELS = [\n";
+    out += `${indent}{ label: "—",${" ".repeat(10)}color: "transparent" },\n`;
+    state.levels.forEach(l => {
+        const pad = Math.max(1, 12 - l.label.length);
+        out += `${indent}{ label: "${escJS(l.label)}",${" ".repeat(pad)}color: "${escJS(l.color)}" },\n`;
+    });
+    out += "];\n\n";
+
+    // SKILLS
+    out += "// ─── SKILL CATEGORIES & SKILLS ───\n";
+    out += "const SKILLS = [\n";
+    state.categories.forEach((cat, ci) => {
+        out += `${indent}{\n`;
+        out += `${indent}${indent}category: "${escJS(cat.category)}",\n`;
+        out += `${indent}${indent}skills: [\n`;
+        cat.skills.forEach((s, si) => {
+            out += `${indent}${indent}${indent}{\n`;
+            out += `${indent}${indent}${indent}${indent}id: "${escJS(s.id)}",\n`;
+            out += `${indent}${indent}${indent}${indent}name: "${escJS(s.name)}",\n`;
+            out += `${indent}${indent}${indent}${indent}description: "${escJS(s.description)}",\n`;
+            out += `${indent}${indent}${indent}${indent}levels: [\n`;
+            s.levels.slice(0, state.levels.length).forEach(l => {
+                out += `${indent}${indent}${indent}${indent}${indent}"${escJS(l)}",\n`;
+            });
+            out += `${indent}${indent}${indent}${indent}],\n`;
+            out += `${indent}${indent}${indent}${indent}improve: [\n`;
+            s.improve.slice(0, state.levels.length).forEach(l => {
+                out += `${indent}${indent}${indent}${indent}${indent}"${escJS(l)}",\n`;
+            });
+            out += `${indent}${indent}${indent}${indent}],\n`;
+            out += `${indent}${indent}${indent}},\n`;
+        });
+        out += `${indent}${indent}],\n`;
+        out += `${indent}},\n`;
+    });
+    out += "];\n";
+
+    return out;
+}
+
+function escJS(s) {
+    if (typeof s !== "string") return s;
+    return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "");
+}
+
+function esc(s) {
+    if (typeof s !== "string") return "";
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// ─────────────────────────────────────────────────────────────
+// PREVIEW
+// ─────────────────────────────────────────────────────────────
+function refreshPreview() {
+    document.getElementById("previewArea").textContent = generateConfigJS();
+}
+
+// ─────────────────────────────────────────────────────────────
+// DOWNLOAD
+// ─────────────────────────────────────────────────────────────
+function downloadConfig() {
+    const js = generateConfigJS();
+    const name = (document.getElementById("profileName").value.trim() || "config");
+    const filename = `skills-config-${name}.js`;
+    const blob = new Blob([js], { type: "text/javascript" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast("Downloaded " + filename);
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER ALL
+// ─────────────────────────────────────────────────────────────
+function renderAll() {
+    renderLevels();
+    renderSkills();
+}
+
+// ─── INIT ───
+renderAll();
+markDirty();
+</script>
+</body>
+</html>
